@@ -1,0 +1,204 @@
+# ðŸ§ª API Flask â€“ DÃ©ploiement Kubernetes avec Ingress NGINX et MetalLB
+
+Ce projet est une **API Flask** dÃ©ployÃ©e sur un cluster **Kubernetes** avec support de **PostgreSQL**, exposÃ©e via **Ingress NGINX** et **MetalLB**. Il s'agit d'un TP Ã©ducatif pour apprendre Ã  conteneuriser et orchestrer des applications.
+
+## ðŸ“ Structure du projet
+
+```
+api-flask/
+â”œâ”€â”€ app.py                  # Application Flask principale
+â”œâ”€â”€ requirements.txt        # DÃ©pendances Python
+â”œâ”€â”€ Dockerfile              # Image Docker Flask
+â”œâ”€â”€ flask-deployment.yaml   # DÃ©ploiement et service Flask
+â”œâ”€â”€ postgres.yaml           # DÃ©ploiement et service PostgreSQL
+â”œâ”€â”€ ingress.yaml            # Ressource Ingress
+â”œâ”€â”€ NetworkPolicy.yaml      # Politique rÃ©seau (optionnelle)
+â”œâ”€â”€ tls/                    # Certificats TLS si besoin
+```
+
+## âœ… PrÃ©requis
+
+- Python 3.8+
+- pip
+- Docker
+- Kubernetes (Minikube, MicroK8s, RKE, etc.)
+- MetalLB configurÃ©
+- Ingress NGINX installÃ©
+- AccÃ¨s `kubectl` fonctionnel
+
+## ðŸš€ Lancement local (dÃ©veloppement)
+
+1. **Cloner le projet**
+
+```bash
+git clone https://github.com/saadiste/api-flask.git
+cd api-flask
+```
+
+2. **CrÃ©er et activer lâ€™environnement virtuel**
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+3. **Installer les dÃ©pendances**
+
+```bash
+pip install -r requirements.txt
+```
+
+4. **Lancer l'application localement**
+
+```bash
+python app.py
+```
+
+Elle est disponible sur : [http://localhost:5000](http://localhost:5000)
+
+## ðŸ³ Construction et exÃ©cution Docker
+
+1. **Construire lâ€™image Docker**
+
+```bash
+docker build -t flask-api:latest .
+```
+
+2. **Lancer lâ€™image localement**
+
+```bash
+docker run -d -p 5000:5000 flask-api:latest
+```
+
+## â˜¸ï¸ DÃ©ploiement Kubernetes
+
+1. **Appliquer les ressources :**
+
+```bash
+kubectl apply -f postgres.yaml
+kubectl apply -f flask-deployment.yaml
+kubectl apply -f NetworkPolicy.yaml        # Optionnel
+```
+
+2. **VÃ©rifier les pods et services**
+
+```bash
+kubectl get pods
+kubectl get svc
+```
+
+## ðŸŒ Configuration de MetalLB et Ingress NGINX
+
+### âš™ï¸ Exemple MetalLB
+
+Fichier `metallb-config.yaml` :
+
+```yaml
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: my-ip-pool
+  namespace: metallb-system
+spec:
+  addresses:
+    - 172.24.255.240-172.24.255.250
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: l2
+  namespace: metallb-system
+```
+
+> Appliquer avec :
+> 
+> ```bash
+> kubectl apply -f metallb-config.yaml
+> ```
+
+### âš™ï¸ Exemple Service Ingress
+
+VÃ©rifie que `ingress-nginx-controller` est de type `LoadBalancer` :
+
+```bash
+kubectl get svc -n ingress-nginx
+```
+
+Sinon, Ã©dite le type :
+
+```bash
+kubectl edit svc ingress-nginx-controller -n ingress-nginx
+```
+
+Change `"type: ClusterIP"` en `"type: LoadBalancer"`
+
+## ðŸ“¥ Ingress pour exposer lâ€™API
+
+Fichier `ingress.yaml` :
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: flask-api-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: "/"
+spec:
+  rules:
+    - host: api-nizar.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: flask-api
+                port:
+                  number: 80
+```
+
+Appliquer :
+
+```bash
+kubectl apply -f ingress.yaml
+```
+
+> âš ï¸ Ajoute dans `/etc/hosts` :
+>
+> ```bash
+> <IP_METALLB> api-nizar.com
+> ```
+
+## ðŸ” Authentification GitHub avec Token
+
+GitHub **nâ€™accepte plus les mots de passe**. Utilise un **Personal Access Token (PAT)** Ã  la place.
+
+1. GÃ©nÃ¨re un token ici : [https://github.com/settings/tokens](https://github.com/settings/tokens)
+2. Lors du `git push`, utilise ton **username** et ce **token** comme mot de passe.
+
+### Exemple :
+
+```bash
+git add .
+git commit -m "update"
+git push origin master
+```
+
+Git te demandera :
+
+- Username â†’ `ton_username`
+- Password â†’ **colle le PAT**
+
+## ðŸ“ž Endpoints de lâ€™API (exemples)
+
+- `GET /` â†’ Message de bienvenue
+- `GET /api/data` â†’ Retourne des donnÃ©es statiques
+- `POST /api/data` â†’ Ajoute des donnÃ©es
+
+## ðŸ™‹â€â™‚ï¸ Auteurs
+
+**Nizar Saadi**
+
+## ðŸ“„ Licence
+
+Ce projet est sous licence MIT.
