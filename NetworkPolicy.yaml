@@ -7,6 +7,4 @@ spec:
     matchLabels:
       app: flask-api
   ingress:
-  - from:
-    - ipBlock:
-        cidr: 172.24.0.26/24  # IP client (VM1)
+  - {}
