@@ -61,7 +61,7 @@ Elle est disponible sur : [http://localhost:5000](http://localhost:5000)
 1. **Construire lâ€™image Docker**
 
 ```bash
-docker build -t flask-api:latest .
+docker build -t flask-api:2.0 .
 ```
 
 2. **Lancer lâ€™image localement**
@@ -87,87 +87,9 @@ kubectl get pods
 kubectl get svc
 ```
 
-## ðŸŒ Configuration de MetalLB et Ingress NGINX
 
-### âš™ï¸ Exemple MetalLB
 
-Fichier `metallb-config.yaml` :
 
-```yaml
-apiVersion: metallb.io/v1beta1
-kind: IPAddressPool
-metadata:
-  name: my-ip-pool
-  namespace: metallb-system
-spec:
-  addresses:
-    - 172.24.255.240-172.24.255.250
----
-apiVersion: metallb.io/v1beta1
-kind: L2Advertisement
-metadata:
-  name: l2
-  namespace: metallb-system
-```
-
-> Appliquer avec :
-> 
-> ```bash
-> kubectl apply -f metallb-config.yaml
-> ```
-
-### âš™ï¸ Exemple Service Ingress
-
-VÃ©rifie que `ingress-nginx-controller` est de type `LoadBalancer` :
-
-```bash
-kubectl get svc -n ingress-nginx
-```
-
-Sinon, Ã©dite le type :
-
-```bash
-kubectl edit svc ingress-nginx-controller -n ingress-nginx
-```
-
-Change `"type: ClusterIP"` en `"type: LoadBalancer"`
-
-## ðŸ“¥ Ingress pour exposer lâ€™API
-
-Fichier `ingress.yaml` :
-
-```yaml
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: flask-api-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: "/"
-spec:
-  rules:
-    - host: api-nizar.com
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: flask-api
-                port:
-                  number: 80
-```
-
-Appliquer :
-
-```bash
-kubectl apply -f ingress.yaml
-```
-
-> âš ï¸ Ajoute dans `/etc/hosts` :
->
-> ```bash
-> <IP_METALLB> api-nizar.com
-> ```
 
 ## ðŸ” Authentification GitHub avec Token
 
