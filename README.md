@@ -1,17 +1,17 @@
-# ðŸ§ª API Flask â€“ DÃ©ploiement Kubernetes avec Ingress NGINX et MetalLB
+# API Flask avec  Déploiement Kubernetes
 
-Ce projet est une **API Flask** dÃ©ployÃ©e sur un cluster **Kubernetes** avec support de **PostgreSQL**,. Il s'agit d'un TP Ã©ducatif pour apprendre Ã  conteneuriser et orchestrer des applications.
+Ce projet est une **API Flask** déployée sur un cluster **Kubernetes** avec support de **PostgreSQL**,. Il s'agit d'un TP éducatif pour apprendre à  conteneuriser et orchestrer des applications.
 
-## ðŸ“ Structure du projet
+## La Structure du projet
 
 ```
 api-flask/
 -app.py                  # Application Flask principale
--requirements.txt        # DÃ©pendances Python
+-requirements.txt        # Dépendances Python
 -Dockerfile              # Image Docker Flask
--flask-deployment.yaml   # DÃ©ploiement et service Flask
--postgres.yaml           # DÃ©ploiement et service PostgreSQL
--NetworkPolicy.yaml      # Politique rÃ©seau (optionnelle)
+-flask-deployment.yaml   # Déploiement et service Flask
+-postgres.yaml           # Déploiement et service PostgreSQL
+-NetworkPolicy.yaml      # Politique réseau (optionnelle)
 -tls/                    # Certificats TLS si besoin
 ```
 
@@ -21,9 +21,9 @@ api-flask/
 - pip
 - Docker
 - Kubernetes (Minikube, MicroK8s, RKE, etc.)
-- AccÃ¨s `kubectl` fonctionnel
+- Accès `kubectl` fonctionnel
 
-## ðŸš€ Lancement local (dÃ©veloppement)
+##  Lancement local (dÃ©veloppement)
 
 1. **Cloner le projet**
 
@@ -32,7 +32,7 @@ git clone https://github.com/saadiste/api-flask.git
 cd api-flask
 ```
 
-2. **CrÃ©er et activer lâ€™environnement virtuel**
+2. **Créer et activer lâ€™environnement virtuel**
 
 ```bash
 python3 -m venv venv
@@ -53,7 +53,7 @@ python app.py
 
 Elle est disponible sur : [http://localhost:5000](http://localhost:5000)
 
-## ðŸ³ Construction et exÃ©cution Docker
+##  Construction et exÃ©cution Docker
 
 1. **Construire lâ€™image Docker**
 
@@ -61,13 +61,13 @@ Elle est disponible sur : [http://localhost:5000](http://localhost:5000)
 docker build -t flask-api:2.0 .
 ```
 
-2. **Lancer lâ€™image localement**
+2. **Lancer l'image localement**
 
 ```bash
 docker run -d -p 5000:5000 flask-api:latest
 ```
 
-## â˜¸ï¸ DÃ©ploiement Kubernetes
+## Déploiement Kubernetes
 
 1. **Appliquer les ressources :**
 
@@ -92,7 +92,7 @@ kubectl get svc
 
 GitHub **nâ€™accepte plus les mots de passe**. Utilise un **Personal Access Token (PAT)** Ã  la place.
 
-1. GÃ©nÃ¨re un token ici : [https://github.com/settings/tokens](https://github.com/settings/tokens)
+1. Génère un token ici : [https://github.com/settings/tokens](https://github.com/settings/tokens)
 2. Lors du `git push`, utilise ton **username** et ce **token** comme mot de passe.
 
 ### Exemple :
@@ -108,16 +108,16 @@ Git te demandera :
 - Username â†’ `ton_username`
 - Password â†’ **colle le PAT**
 
-## ðŸ“ž Endpoints de lâ€™API (exemples)
+## Endpoints de l'API (exemples)
 
 - `GET /` â†’ Message de bienvenue
 - `GET /api/data` â†’ Retourne des donnÃ©es statiques
 - `POST /api/data` â†’ Ajoute des donnÃ©es
 
-## ðŸ™‹â€â™‚ï¸ Auteurs
+## Auteur
 
 **Nizar Saadi**
 
-## ðŸ“„ Licence
+## Licence
 
 Ce projet est sous licence MIT.
