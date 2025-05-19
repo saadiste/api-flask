@@ -1,29 +1,26 @@
 # ðŸ§ª API Flask â€“ DÃ©ploiement Kubernetes avec Ingress NGINX et MetalLB
 
-Ce projet est une **API Flask** dÃ©ployÃ©e sur un cluster **Kubernetes** avec support de **PostgreSQL**, exposÃ©e via **Ingress NGINX** et **MetalLB**. Il s'agit d'un TP Ã©ducatif pour apprendre Ã  conteneuriser et orchestrer des applications.
+Ce projet est une **API Flask** dÃ©ployÃ©e sur un cluster **Kubernetes** avec support de **PostgreSQL**,. Il s'agit d'un TP Ã©ducatif pour apprendre Ã  conteneuriser et orchestrer des applications.
 
 ## ðŸ“ Structure du projet
 
 ```
 api-flask/
-â”œâ”€â”€ app.py                  # Application Flask principale
-â”œâ”€â”€ requirements.txt        # DÃ©pendances Python
-â”œâ”€â”€ Dockerfile              # Image Docker Flask
-â”œâ”€â”€ flask-deployment.yaml   # DÃ©ploiement et service Flask
-â”œâ”€â”€ postgres.yaml           # DÃ©ploiement et service PostgreSQL
-â”œâ”€â”€ ingress.yaml            # Ressource Ingress
-â”œâ”€â”€ NetworkPolicy.yaml      # Politique rÃ©seau (optionnelle)
-â”œâ”€â”€ tls/                    # Certificats TLS si besoin
+-app.py                  # Application Flask principale
+-requirements.txt        # DÃ©pendances Python
+-Dockerfile              # Image Docker Flask
+-flask-deployment.yaml   # DÃ©ploiement et service Flask
+-postgres.yaml           # DÃ©ploiement et service PostgreSQL
+-NetworkPolicy.yaml      # Politique rÃ©seau (optionnelle)
+-tls/                    # Certificats TLS si besoin
 ```
 
-## âœ… PrÃ©requis
+##Prérequis
 
 - Python 3.8+
 - pip
 - Docker
 - Kubernetes (Minikube, MicroK8s, RKE, etc.)
-- MetalLB configurÃ©
-- Ingress NGINX installÃ©
 - AccÃ¨s `kubectl` fonctionnel
 
 ## ðŸš€ Lancement local (dÃ©veloppement)
